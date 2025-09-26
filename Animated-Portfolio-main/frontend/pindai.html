@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pindai QR Code - Pelacakan Aset</title>
+    <!-- Memuat Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Memuat Pustaka jsQR untuk pemindaian -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* bg-slate-900 */
+        }
+        .scanner-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #38bdf8, transparent);
+            animation: scan-line 2.5s linear infinite;
+            box-shadow: 0 0 10px #38bdf8, 0 0 20px #38bdf8;
+            will-change: transform;
+        }
+        @keyframes scan-line {
+            0% { transform: translateY(-10px); }
+            50% { transform: translateY(calc(100% - 3px)); }
+            100% { transform: translateY(-10px); }
+        }
+        .scanner-active {
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.4), inset 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+        .scan-result-popup {
+            background-color: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(8px);
+        }
+        #result-details .detail-grid {
+            text-align: left;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.75rem 1rem; /* diperbesar gap */
+        }
+        #result-details .detail-label {
+            font-weight: 600;
+            color: #4b5563; /* text-gray-600 */
+            display: flex;
+            align-items: center;
+        }
+        #result-details .detail-value {
+            font-weight: 500;
+            color: #1f2937; /* text-gray-800 */
+        }
+    </style>
+</head>
+<body class="text-slate-200 flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-2xl text-center p-6 bg-slate-800/50 border border-slate-700 rounded-3xl backdrop-blur-sm">
+        <h1 class="text-3xl sm:text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-indigo-400">Pindai QR Code Aset</h1>
+        <p id="instruction-text" class="text-slate-400 mb-6 text-base sm:text-lg">Arahkan kamera ke QR code. Pemindaian akan berjalan otomatis.</p>
+        
+        <!-- Area Video Scanner -->
+        <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl shadow-blue-500/20 mb-6 scanner-container border-2 border-slate-700">
+            <video id="qr-video" class="w-full h-full object-cover transition-all duration-500" playsinline></video>
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                 <!-- Corner Brackets -->
+                <div class="absolute top-4 left-4 w-10 h-10 border-t-4 border-l-4 border-sky-400 rounded-tl-lg"></div>
+                <div class="absolute top-4 right-4 w-10 h-10 border-t-4 border-r-4 border-sky-400 rounded-tr-lg"></div>
+                <div class="absolute bottom-4 left-4 w-10 h-10 border-b-4 border-l-4 border-sky-400 rounded-bl-lg"></div>
+                <div class="absolute bottom-4 right-4 w-10 h-10 border-b-4 border-r-4 border-sky-400 rounded-br-lg"></div>
+            </div>
+            <canvas id="qr-canvas" class="hidden"></canvas>
+        </div>
+        
+        <!-- Pesan Status dan Error -->
+        <div id="status-container" class="min-h-[60px] flex flex-col items-center justify-center">
+            <div id="loading-spinner" class="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-400"></div>
+            <p id="status-message" class="text-slate-400 mt-4 text-lg font-medium">Mengaktifkan kamera...</p>
+        </div>
+
+        <!-- Tombol Kembali -->
+        <div class="mt-4">
+             <a href="admin.html#PelacakanAsetContent" class="group inline-flex items-center gap-3 px-8 py-3 bg-slate-700/80 hover:bg-slate-700 text-white font-semibold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-slate-600/20">
+                <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Kembali
+            </a>
+        </div>
+    </div>
+    
+    <!-- Popup Hasil Pindaian -->
+    <div id="scan-result-popup" class="fixed inset-0 z-50 flex items-center justify-center p-4 scan-result-popup opacity-0 hidden transition-opacity duration-300">
+        <div class="bg-white text-slate-800 rounded-3xl shadow-2xl w-full max-w-lg p-6 sm:p-8 text-center transform transition-all scale-95 opacity-0">
+            <div id="result-icon" class="mb-4">
+                <!-- Icon (sukses/gagal) akan diisi oleh JS -->
+            </div>
+            <h2 id="result-title" class="text-3xl font-bold mb-4"></h2>
+            <div id="result-details" class="mb-6">
+                <!-- Detail aset akan diisi oleh JS -->
+            </div>
+            <div class="mt-8">
+                 <button id="close-result-popup" class="w-full group inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-blue-500/30">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M20 20v-5h-5M4 4l5 5M20 20l-5-5"></path></svg>
+                    Pindai Lagi
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+    //================================================================
+    // 1. KELAS QRSCANNER (Tidak ada perubahan)
+    //================================================================
+    class QRScanner {
+        constructor(options = {}) {
+            this.videoElement = options.videoElement;
+            this.canvasElement = options.canvasElement;
+            this.onResult = options.onResult || (() => {});
+            this.onError = options.onError || (() => {});
+            this.onReady = options.onReady || (() => {});
+            this.scanInterval = options.scanInterval || 300;
+            this.scanActive = false;
+            this.stream = null;
+            this.intervalId = null;
+        }
+
+        async startCamera() {
+            try {
+                if (!this.videoElement) throw new Error("Elemen video tidak tersedia.");
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    throw new Error("Kamera tidak didukung oleh browser ini.");
+                }
+                this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                this.videoElement.srcObject = this.stream;
+                await this.videoElement.play();
+                this.videoElement.classList.add('scanner-active');
+                this.scanActive = true;
+                this.startScanning();
+                this.onReady();
+                return true;
+            } catch (err) {
+                this.onError(err.message);
+                return false;
+            }
+        }
+
+        startScanning() {
+            if (!this.canvasElement || !this.videoElement) {
+                this.onError("Elemen canvas atau video null.");
+                return;
+            }
+            this.intervalId = setInterval(() => {
+                if (!this.scanActive) return;
+                if (this.videoElement.readyState === this.videoElement.HAVE_ENOUGH_DATA) {
+                    this.canvasElement.width = this.videoElement.videoWidth;
+                    this.canvasElement.height = this.videoElement.videoHeight;
+                    const ctx = this.canvasElement.getContext('2d');
+                    ctx.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height);
+                    const imageData = ctx.getImageData(0, 0, this.canvasElement.width, this.canvasElement.height);
+                    if (window.jsQR) {
+                        const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
+                        if (code) {
+                            this.onResult(code.data);
+                            this.stop();
+                        }
+                    }
+                }
+            }, this.scanInterval);
+        }
+
+        stop() {
+            this.scanActive = false;
+            clearInterval(this.intervalId);
+            if (this.stream) {
+                this.stream.getTracks().forEach(track => track.stop());
+                this.stream = null;
+            }
+            if (this.videoElement) {
+                this.videoElement.classList.remove('scanner-active');
+            }
+        }
+    }
+
+    //================================================================
+    // 2. LOGIKA HALAMAN PINDAI (UI Ditingkatkan)
+    //================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        const videoElement = document.getElementById('qr-video');
+        const canvasElement = document.getElementById('qr-canvas');
+        const statusMessage = document.getElementById('status-message');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const resultPopup = document.getElementById('scan-result-popup');
+        const resultPopupContent = resultPopup.querySelector('.transform');
+        const resultIcon = document.getElementById('result-icon');
+        const resultTitle = document.getElementById('result-title');
+        const resultDetails = document.getElementById('result-details');
+        const closeResultButton = document.getElementById('close-result-popup');
+
+        let qrScannerInstance = null;
+
+        // **DIUBAH**: Fungsi ini sekarang mengambil data dari beberapa nama kunci (key)
+        function getAssetsFromStorage() {
+            const possibleKeys = ['assets', 'assetsV3', 'kdataAsetKampus', 'allAssets'];
+            let combinedAssets = [];
+
+            for (const key of possibleKeys) {
+                try {
+                    const assetsString = localStorage.getItem(key);
+                    if (assetsString) {
+                        const assetsArray = JSON.parse(assetsString);
+                        if (Array.isArray(assetsArray)) {
+                             combinedAssets = combinedAssets.concat(assetsArray);
+                        }
+                    }
+                } catch (error) {
+                    console.error(`Gagal mengambil data dari localStorage dengan kunci "${key}":`, error);
+                }
+            }
+            // Hapus duplikat berdasarkan 'id' jika ada
+            const uniqueAssets = Array.from(new Map(combinedAssets.map(item => [item.id, item])).values());
+            return uniqueAssets;
+        }
+        
+        function getStatusClass(status) {
+            switch (status) {
+                case 'Disetujui': return 'bg-emerald-100 text-emerald-800';
+                case 'Menunggu Persetujuan': return 'bg-amber-100 text-amber-800';
+                case 'Ditolak': return 'bg-red-100 text-red-800';
+                default: return 'bg-slate-200 text-slate-800';
+            }
+        }
+
+        function processScanResult(qrData) {
+            const allAssets = getAssetsFromStorage();
+            
+            if (allAssets.length === 0) {
+                 resultIcon.innerHTML = `
+                    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100">
+                        <svg class="h-10 w-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    </div>`;
+                resultTitle.textContent = "Data Kosong";
+                resultDetails.innerHTML = `<p class="text-slate-600">Gagal memuat data aset. Pastikan Anda telah mengunjungi halaman utama terlebih dahulu untuk menyinkronkan data.</p>`;
+                showResultPopup();
+                return;
+            }
+            
+            const foundAsset = allAssets.find(asset => asset.kodeAset === qrData);
+
+            if (foundAsset) {
+                const statusClass = getStatusClass(foundAsset.status);
+                resultIcon.innerHTML = `
+                    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100">
+                        <svg class="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </div>`;
+                resultTitle.textContent = "Aset Ditemukan!";
+                resultDetails.innerHTML = `
+                    <div class="p-4 bg-slate-50 rounded-xl detail-grid border border-slate-200">
+                        <span class="detail-label">Kode Aset</span><span class="detail-value font-mono p-1 bg-slate-200 rounded-md">${foundAsset.kodeAset}</span>
+                        <span class="detail-label">Nama Aset</span><span class="detail-value">${foundAsset.namaAset}</span>
+                        <span class="detail-label">Lokasi</span><span class="detail-value">${foundAsset.lokasi}</span>
+                        <span class="detail-label">Tgl. Perolehan</span><span class="detail-value">${foundAsset.tanggal || 'N/A'}</span>
+                        <span class="detail-label">Status</span><span class="detail-value"><span class="px-3 py-1 text-sm font-semibold rounded-full ${statusClass}">${foundAsset.status}</span></span>
+                    </div>`;
+            } else {
+                resultIcon.innerHTML = `
+                    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100">
+                        <svg class="h-10 w-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </div>`;
+                resultTitle.textContent = "Aset Tidak Ditemukan";
+                resultDetails.innerHTML = `<p class="text-slate-600">Tidak ada data aset yang cocok untuk kode <br><strong class="font-mono text-red-500">${qrData}</strong></p>`;
+            }
+
+            showResultPopup();
+        }
+        
+        function showResultPopup() {
+            resultPopup.classList.remove('hidden');
+            setTimeout(() => {
+                resultPopup.classList.add('opacity-100');
+                resultPopupContent.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
+        
+        function hideResultPopup() {
+             resultPopup.classList.remove('opacity-100');
+             resultPopupContent.classList.add('scale-95', 'opacity-0');
+             setTimeout(() => {
+                resultPopup.classList.add('hidden');
+                startScanner();
+             }, 300);
+        }
+
+        function startScanner() {
+            statusMessage.textContent = 'Mengaktifkan kamera...';
+            statusMessage.classList.remove('text-red-400');
+            loadingSpinner.style.display = 'block';
+
+            qrScannerInstance = new QRScanner({
+                videoElement,
+                canvasElement,
+                onReady: () => {
+                    statusMessage.textContent = 'Kamera Aktif. Pindai QR code.';
+                    loadingSpinner.style.display = 'none';
+                },
+                onResult: (result) => {
+                    processScanResult(result);
+                },
+                onError: (error) => {
+                    statusMessage.textContent = `Error: ${error}`;
+                    statusMessage.classList.add('text-red-400');
+                    loadingSpinner.style.display = 'none';
+                }
+            });
+            qrScannerInstance.startCamera();
+        }
+
+        closeResultButton.addEventListener('click', hideResultPopup);
+        startScanner();
+    });
+    </script>
+</body>
+</html>

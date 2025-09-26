@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Eminent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            primary: '#4F46E5',
+                            primaryHover: '#4338CA',
+                            primaryActive: '#3730A3',
+                            primaryDark: '#312E81',
+                            primaryLight: '#E0E7FF',
+                            secondary: '#10B981',
+                            lightBlue: '#3B82F6',
+                            lightBlueHover: '#2563EB',
+                            lightBlueActive: '#1D4ED8',
+                        },
+                        ui: {
+                            surface: 'rgba(31, 41, 55, 0.9)',
+                            surfaceContent: '#374151',
+                            border: '#4B5563',
+                            borderFocus: '#3B82F6',
+                            textPrimary: '#F3F4F6',
+                            textSecondary: '#D1D5DB',
+                            textPlaceholder: '#6B7280',
+                            error: '#EF4444',
+                            errorLight: '#FECACA',
+                            errorRingColor: '#F87171',
+                            success: '#22C55E',
+                            successLight: '#BBF7D0',
+                            successText: '#059669',
+                        },
+                    },
+                    boxShadow: {
+                        'card': '0 8px 32px rgba(0, 0, 0, 0.25), 0 0 16px rgba(79, 70, 229, 0.15)',
+                        'input': '0 1px 2px 0 rgba(0, 0, 0, 0.15)',
+                        'input-focus': '0 0 0 3.5px rgba(59, 130, 246, 0.35)',
+                        'button': '0 4px 12px -2px rgba(59, 130, 246, 0.3), 0 2px 7px -2px rgba(59, 130, 246, 0.25)',
+                        'button-hover': '0 7px 14px -3px rgba(59, 130, 246, 0.4), 0 3px 6px -3px rgba(59, 130, 246, 0.35)',
+                        'button-glow': '0 0 20px 3px rgba(59, 130, 246, 0.45)',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out forwards',
+                        'fade-in-down': 'fadeInDown 0.5s ease-out forwards',
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                        'pop-in': 'popIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards',
+                        'subtle-pulse': 'subtlePulse 2.5s ease-in-out infinite',
+                        'gentle-bob': 'gentleBob 3s ease-in-out infinite alternate',
+                        'slide-in-right': 'slideInRight 0.4s ease-out forwards',
+                        'slide-out-left': 'slideOutLeft 0.4s ease-out forwards',
+                        'slide-in-left': 'slideInLeft 0.4s ease-out forwards',
+                        'slide-out-right': 'slideOutRight 0.4s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        fadeInDown: { '0%': { opacity: '0', transform: 'translateY(-15px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        fadeInUp: { '0%': { opacity: '0', transform: 'translateY(15px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        popIn: { '0%': { opacity: '0', transform: 'scale(0.95)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
+                        subtlePulse: {
+                            '0%, 100%': { boxShadow: `theme('boxShadow.button')`, transform: 'scale(1)' },
+                            '50%': { boxShadow: `theme('boxShadow.button-glow')`, transform: 'scale(1.02)' },
+                        },
+                        gentleBob: {
+                            '0%': { transform: 'translateY(0px)' },
+                            '100%': { transform: 'translateY(-8px)' },
+                        },
+                        slideInRight: { '0%': { transform: 'translateX(15px)', opacity: '0' }, '100%': { transform: 'translateX(0)', opacity: '1' } },
+                        slideOutLeft: { '0%': { transform: 'translateX(0)', opacity: '1' }, '100%': { transform: 'translateX(-15px)', opacity: '0' } },
+                        slideInLeft: { '0%': { transform: 'translateX(-15px)', opacity: '0' }, '100%': { transform: 'translateX(0)', opacity: '1' } },
+                        slideOutRight: { '0%': { transform: 'translateX(0)', opacity: '1' }, '100%': { transform: 'translateX(15px)', opacity: '0' } },
+                    },
+                    borderRadius: {
+                        'xl': '0.5rem',
+                        '2xl': '1rem',
+                        '3xl': '1.25rem',
+                    },
+                    backdropBlur: {
+                        'sm': '6px',
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: theme('colors.slate.900');
+            background-image: linear-gradient(
+                    to bottom,
+                    rgba(15, 23, 42, 0.9),
+                    rgba(15, 23, 42, 1)
+                ),
+                url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+        #registrationPageWrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        #registrationContainer {
+            display: flex;
+            width: 100%;
+            max-width: 66rem;
+            height: auto;
+            min-height: 34rem;
+            max-height: calc(100vh - 2rem);
+            background-color: theme('colors.ui.surface');
+            backdrop-filter: blur(6px);
+            box-shadow: theme('boxShadow.card');
+            border-radius: theme('borderRadius.2xl');
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        #formPane {
+            background-color: theme('colors.ui.surface');
+            overflow-y: auto;
+        }
+        #infoPane {
+            background: linear-gradient(
+                135deg,
+                theme('colors.brand.primaryDark') 0%,
+                theme('colors.brand.primary') 100%
+            );
+            color: theme('colors.ui.textPrimary');
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #infoPane.admin-mode {
+            background: linear-gradient(
+                135deg,
+                theme('colors.brand.secondary') 0%,
+                #059669 100%
+            );
+        }
+        #formPane::-webkit-scrollbar {
+            display: none;
+        }
+        #formPane {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .form-step {
+            display: none;
+            opacity: 0;
+        }
+        .form-step.active {
+            display: block;
+            opacity: 1;
+        }
+        .form-block-inner {
+            background-color: theme('colors.ui.surfaceContent');
+            padding: 1.5rem;
+            border-radius: theme('borderRadius.xl');
+            width: 100%;
+            max-width: 28rem;
+            margin: 0 auto;
+            border: 1px solid theme('colors.slate.600');
+        }
+        @media (min-width: 768px) {
+            #formPane {
+                padding: 2.5rem;
+            }
+            .form-block-inner {
+                padding: 2rem;
+            }
+            #infoPane {
+                padding: 3rem;
+            }
+        }
+        @media (max-width: 767.98px) {
+            #registrationContainer {
+                flex-direction: column;
+                max-height: none;
+                min-height: 0;
+            }
+            #infoPane {
+                width: 100%;
+                padding: 2rem;
+                min-height: 200px;
+                border-radius: theme('borderRadius.2xl') theme('borderRadius.2xl') 0 0;
+                order: 1;
+            }
+            #formPane {
+                width: 100%;
+                padding: 1.5rem;
+                border-radius: 0 0 theme('borderRadius.2xl') theme('borderRadius.2xl');
+                order: 2;
+            }
+            .form-block-inner {
+                padding: 1.25rem;
+                max-width: none;
+            }
+        }
+        .input-group {
+            position: relative;
+        }
+        .form-input {
+            background-color: theme('colors.ui.surfaceContent');
+            border: 1px solid theme('colors.ui.border');
+            color: theme('colors.ui.textPrimary');
+            padding-top: 0.875rem;
+            padding-bottom: 0.875rem;
+            padding-left: 2.75rem;
+            padding-right: 1.25rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            box-shadow: theme('boxShadow.input');
+            font-weight: 500;
+            width: 100%;
+            border-radius: theme('borderRadius.xl');
+        }
+        .form-input.has-right-icon {
+            padding-right: 2.75rem;
+        }
+        .form-input::placeholder {
+            color: theme('colors.ui.textPlaceholder');
+            font-weight: 400;
+        }
+        .form-input:focus {
+            border-color: theme('colors.ui.borderFocus');
+            box-shadow: theme('boxShadow.input-focus');
+            background-color: theme('colors.slate.600');
+            outline: none;
+        }
+        .message-box {
+            padding: 0.875rem 1.25rem;
+            border-radius: 0.75rem;
+            text-align: left;
+            font-weight: 500;
+            font-size: 0.9rem;
+            animation: popIn 0.4s ease-out forwards;
+            border-width: 1px;
+            border-style: solid;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            max-height: 6rem;
+            overflow-y: auto;
+            margin: 0.5rem 0;
+        }
+        .message-box-error {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border-color: #dc2626;
+        }
+        .message-box-success {
+            background-color: #dcfce7;
+            color: #166534;
+            border-color: #166534;
+        }
+        .message-box-error i {
+            color: #dc2626;
+        }
+        .message-box-success i {
+            color: #166534;
+        }
+        .field-error-text {
+            color: theme('colors.ui.error');
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            min-height: 1rem;
+            font-weight: 500;
+        }
+        .btn-loading {
+            position: relative;
+        }
+        .btn-loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 3px solid transparent;
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        .btn-loading > span,
+        .btn-loading > i {
+            opacity: 0.5;
+        }
+        @keyframes spin {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+        .clickable-effect:active {
+            transform: scale(0.97);
+            filter: brightness(0.9);
+            transition: transform 0.1s ease, filter 0.1s ease;
+        }
+        .animated-item {
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+        .btn-secondary {
+            background-color: theme('colors.ui.surfaceContent');
+            color: theme('colors.ui.textPrimary');
+            border: 1px solid theme('colors.ui.border');
+        }
+        .btn-secondary:hover {
+            background-color: theme('colors.slate.600');
+        }
+        .input-icon-left {
+            position: absolute;
+            top: 50%;
+            left: 0.875rem;
+            transform: translateY(-50%) scale(1);
+            color: theme('colors.ui.textSecondary');
+            transition: color 0.2s ease, transform 0.2s ease-out;
+            pointer-events: none;
+        }
+        .input-icon-left.active {
+            color: theme('colors.brand.lightBlue');
+            transform: translateY(-50%) scale(1.1);
+        }
+        .input-icon-right-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            padding-right: 0.875rem;
+            cursor: pointer;
+        }
+        .input-icon-right {
+            color: theme('colors.ui.textSecondary');
+            transition: color 0.2s ease;
+        }
+        .input-icon-right:hover,
+        .input-icon-right.active {
+            color: theme('colors.brand.lightBlue');
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <main id="registrationPageWrapper">
+        <div id="registrationContainer" class="md:flex-row">
+            <div id="infoPane" class="w-full md:w-5/12 lg:w-2/5 flex-col justify-center items-center text-center relative transition-all duration-300 ease-in-out hidden md:flex order-1">
+                <div class="z-10 w-full">
+                    <div class="mb-4 animated-item animate-fade-in-down" data-delay="0.1">
+                        <span class="text-2xl font-bold text-white tracking-tight">Eminent</span>
+                        <p class="text-xs text-gray-300 mt-1 font-medium">Platform Inventaris Cerdas</p>
+                    </div>
+                    <div id="interactiveIconContainer" class="mb-4 animated-item animate-fade-in mx-auto" data-delay="0.3">
+                        <i id="infoPaneIcon" class="fas fa-cubes fa-3x text-brand-primaryLight transition-transform duration-300 animate-gentle-bob"></i>
+                    </div>
+                    <div class="animated-item animate-fade-in-down" data-delay="0.5">
+                        <h2 class="text-xl font-semibold mb-2 text-white" id="infoPaneTitle">Satu Langkah Lagi!</h2>
+                        <p class="text-sm leading-relaxed text-gray-200" id="infoPaneSubtitle">
+                            Daftarkan diri Anda untuk mengelola inventaris dengan mudah.
+                        </p>
+                    </div>
+                    <div id="adminInfoPanel" class="mt-4 p-2 bg-black/20 rounded-lg hidden animated-item animate-fade-in" data-delay="0.6">
+                        <p class="text-xs font-semibold text-white">
+                            <i class="fas fa-user-shield mr-1 text-yellow-400"></i>Akses Administrator
+                        </p>
+                        <p class="text-xs text-gray-300 mt-1">Kontrol penuh atas sistem.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="formPane" class="w-full md:w-7/12 lg:w-3/5 flex flex-col justify-center order-2">
+                <div class="form-block-inner">
+                    <h1 class="text-2xl md:text-3xl font-bold text-ui-textPrimary mb-2 md:mb-3 text-center animated-item animate-fade-in-down" style="animation-delay: 0.25s;">Daftarkan Akun Anda</h1>
+                    <p class="text-ui-textSecondary mb-4 md:mb-6 text-base text-center animated-item animate-fade-in-down" style="animation-delay: 0.3s;">Silakan isi detail di bawah untuk melanjutkan.</p>
+
+                    <div id="messageBoxContainer" class="hidden"></div>
+                    
+                    <form id="registerForm" class="overflow-hidden">
+                        <div id="step1" class="form-step active space-y-5">
+                            <div class="animated-item animate-fade-in-up" style="animation-delay: 0.35s;">
+                                <label for="name" class="block text-sm font-semibold text-ui-textSecondary mb-1.5">Nama Lengkap</label>
+                                <div class="input-group">
+                                    <i id="nameIcon" class="fas fa-user input-icon-left"></i>
+                                    <input type="text" id="name" name="name" placeholder="Masukkan nama lengkap Anda" required
+                                           class="w-full form-input rounded-lg py-3 focus:border-brand-lightBlue focus:ring-2 focus:ring-brand-lightBlue/30 transition-all duration-200" />
+                                </div>
+                                <div id="nameError" class="field-error-text"></div>
+                            </div>
+                            <div class="animated-item animate-fade-in-up" style="animation-delay: 0.4s;">
+                               <label for="email" class="block text-sm font-semibold text-ui-textSecondary mb-1.5">Alamat Email</label>
+                               <div class="input-group">
+                                    <i id="emailIcon" class="fas fa-envelope input-icon-left"></i>
+                                    <input type="email" id="email" name="email" placeholder="contoh: nama@domain.com" required
+                                           class="w-full form-input rounded-lg py-3 focus:border-brand-lightBlue focus:ring-2 focus:ring-brand-lightBlue/30 transition-all duration-200" />
+                                </div>
+                                <div id="emailError" class="field-error-text"></div>
+                            </div>
+                            <div class="animated-item animate-fade-in-up pt-2" style="animation-delay: 0.45s;">
+                                <button type="button" id="nextStepBtn"
+                                        class="w-full bg-brand-lightBlue hover:bg-brand-lightBlueHover text-white py-3.5 px-6 rounded-lg font-semibold focus:outline-none focus:ring-4 focus:ring-brand-lightBlue/40 transition-all duration-300 shadow-md hover:shadow-lg relative flex items-center justify-center group transform hover:-translate-y-0.5">
+                                    <span class="transition-all duration-300 group-hover:pr-2">Lanjutkan</span>
+                                    <i class="fas fa-arrow-right ml-2 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="step2" class="form-step space-y-3">
+                            <div class="animated-item" style="animation-delay: 0.35s;">
+                                <label for="password" class="block text-sm font-semibold text-ui-textSecondary mb-1.5">Kata Sandi</label>
+                                <div class="input-group">
+                                    <i id="passwordLeftIcon" class="fas fa-key input-icon-left"></i>
+                                    <input type="password" id="password" name="password" placeholder="Buat kata sandi (minimal 6 karakter)" required
+                                           class="w-full form-input has-right-icon rounded-lg py-3 focus:border-brand-lightBlue focus:ring-2 focus:ring-brand-lightBlue/30 transition-all duration-200" />
+                                    <div class="input-icon-right-wrapper">
+                                        <i id="passwordToggleIcon" class="fas fa-eye input-icon-right"></i>
+                                    </div>
+                                </div>
+                                <div id="passwordError" class="field-error-text"></div>
+                            </div>
+                            <div class="animated-item" style="animation-delay: 0.4s;">
+                                <label for="confirmPassword" class="block text-sm font-semibold text-ui-textSecondary mb-1">Konfirmasi Kata Sandi</label>
+                                <div class="input-group">
+                                    <i id="confirmPasswordLeftIcon" class="fas fa-key input-icon-left"></i>
+                                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Konfirmasi kata sandi" required
+                                           class="w-full form-input has-right-icon rounded-lg py-3 focus:border-brand-lightBlue focus:ring-2 focus:ring-brand-lightBlue/30 transition-all duration-200" />
+                                    <div class="input-icon-right-wrapper">
+                                        <i id="confirmPasswordToggleIcon" class="fas fa-eye input-icon-right"></i>
+                                    </div>
+                                </div>
+                                <div id="confirmPasswordError" class="field-error-text"></div>
+                            </div>
+                            <div class="flex items-center pt-0.5 animated-item" style="animation-delay: 0.45s;">
+                                <input type="checkbox" id="isAdmin" name="isAdmin" class="h-4 w-4 text-brand-lightBlue bg-ui-surfaceContent border-ui-border rounded focus:ring-2 focus:ring-brand-lightBlue focus:ring-offset-2 focus:ring-offset-ui-surfaceContent mr-2.5 accent-brand-lightBlue cursor-pointer" />
+                                <label for="isAdmin" class="text-sm text-ui-textSecondary group-hover:text-brand-lightBlue transition-colors font-medium cursor-pointer">Daftar sebagai Admin</label>
+                            </div>
+                            <div id="adminKeyGroup" class="hidden transition-all duration-300 ease-in-out opacity-0 max-h-0 animated-item" style="animation-delay: 0.5s; transition-property: opacity, max-height;">
+                                <label for="adminKey" class="block text-sm font-semibold text-ui-textSecondary mb-1">Kunci Rahasia Admin</label>
+                                <div class="input-group">
+                                    <i id="adminKeyLeftIcon" class="fas fa-shield-alt input-icon-left"></i>
+                                    <input type="password" id="adminKey" name="adminKey" placeholder="Masukkan Kunci Rahasia Admin"
+                                       class="w-full form-input rounded-lg py-3 focus:border-brand-lightBlue focus:ring-2 focus:ring-brand-lightBlue/30 transition-all duration-200" />
+                                    </div>
+                                <div id="adminKeyError" class="field-error-text"></div>
+                            </div>
+                            <div class="flex space-x-3 pt-1.5 animated-item" style="animation-delay: 0.55s;">
+                                <button type="button" id="prevStepBtn"
+                                        class="clickable-effect w-1/2 btn-secondary text-white py-3 md:py-3.5 px-4 rounded-xl font-semibold focus:outline-none focus:ring-4 focus:ring-brand-lightBlue/40 transition-all duration-300 shadow-button hover:shadow-button-glow relative flex items-center justify-center group transform hover:scale-[1.02] text-base">
+                                    <i class="fas fa-arrow-left mr-2.5 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300"></i>
+                                    <span>Kembali</span>
+                                </button>
+                                <button type="submit" id="submitBtn"
+                                        class="clickable-effect w-1/2 bg-brand-lightBlue hover:bg-brand-lightBlueHover active:bg-brand-lightBlueActive text-white py-3 md:py-3.5 px-4 rounded-xl font-semibold focus:outline-none focus:ring-4 focus:ring-brand-lightBlue/40 transition-all duration-300 shadow-button hover:shadow-button-glow relative flex items-center justify-center group transform hover:scale-[1.02] text-base animate-subtle-pulse">
+                                    <span id="btnText">Daftar Sekarang</span>
+                                    <i class="fas fa-user-plus ml-2.5 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4 animated-item animate-fade-in-up" style="animation-delay: 0.7s;">
+                            <p class="text-sm text-ui-textSecondary">
+                                Sudah punya akun?
+                                <a href="index.html" class="clickable-effect font-semibold text-brand-lightBlue hover:text-brand-lightBlueHover hover:underline">Masuk di sini</a>
+                            </p>
+                        </div>
+                    </form> 
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM Elements
+        const adminCheckbox = document.getElementById("isAdmin");
+        const adminKeyGroup = document.getElementById("adminKeyGroup");
+        const adminKeyInput = document.getElementById("adminKey");
+        const registerForm = document.getElementById("registerForm");
+        const submitBtn = document.getElementById("submitBtn");
+        const btnText = document.getElementById("btnText");
+        const messageBoxContainer = document.getElementById("messageBoxContainer");
+
+        const infoPane = document.getElementById("infoPane");
+        const adminInfoPanel = document.getElementById("adminInfoPanel");
+        const infoPaneTitle = document.getElementById("infoPaneTitle");
+        const infoPaneSubtitle = document.getElementById("infoPaneSubtitle");
+        const infoPaneIconEl = document.getElementById("infoPaneIcon");
+
+        const step1Element = document.getElementById("step1");
+        const step2Element = document.getElementById("step2");
+        const nextStepBtn = document.getElementById("nextStepBtn");
+        const prevStepBtn = document.getElementById("prevStepBtn");
+        let currentStep = 1;
+
+        // Input fields and icons
+        const nameInput = document.getElementById("name");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+        const adminKeyLeftIcon = document.getElementById("adminKeyLeftIcon"); 
+
+        const nameIcon = document.getElementById("nameIcon"); 
+        const emailIcon = document.getElementById("emailIcon"); 
+        const passwordLeftIcon = document.getElementById("passwordLeftIcon"); 
+        const passwordToggleIcon = document.getElementById("passwordToggleIcon"); 
+        const confirmPasswordLeftIcon = document.getElementById("confirmPasswordLeftIcon"); 
+        const confirmPasswordToggleIcon = document.getElementById("confirmPasswordToggleIcon"); 
+
+        // --- Fungsi Utilitas Animasi & UI ---
+        function updateInfoPaneContent(step) {
+            if (step === 1) {
+                infoPaneTitle.textContent = "Selamat Datang di Eminent!";
+                infoPaneSubtitle.textContent = "Lengkapi detail Anda untuk memulai perjalanan mengelola inventaris dengan lebih cerdas dan efisien.";
+                if(infoPaneIconEl) infoPaneIconEl.className = "fas fa-user-plus fa-3x text-brand-primaryLight transition-transform duration-300 animate-gentle-bob";
+            } else if (step === 2) {
+                infoPaneTitle.textContent = "Hampir Selesai!";
+                infoPaneSubtitle.textContent = "Atur kata sandi Anda dan tentukan peran untuk menyelesaikan pendaftaran.";
+                if(infoPaneIconEl) infoPaneIconEl.className = "fas fa-shield-alt fa-3x text-brand-primaryLight transition-transform duration-300 animate-gentle-bob";
+            }
+            if(infoPaneIconEl) {
+                infoPaneIconEl.style.animation = 'none';
+                infoPaneIconEl.offsetHeight; 
+                infoPaneIconEl.style.animation = null;
+                setTimeout(() => infoPaneIconEl.classList.add('animate-gentle-bob'), 0);
+            }
+        }
+
+        function animateStep(element, animationClassOut, animationClassIn, show) {
+            const allSlideAnimations = ['animate-slide-in-right', 'animate-slide-out-left', 'animate-slide-in-left', 'animate-slide-out-right'];
+            allSlideAnimations.forEach(anim => element.classList.remove(anim));
+
+            if (show) {
+                element.classList.remove('hidden', 'opacity-0');
+                element.classList.add('active');
+                element.style.animation = 'none'; 
+                element.offsetHeight; 
+                element.style.animation = null; 
+                element.classList.add(animationClassIn);
+
+                const animatedItems = element.querySelectorAll('.animated-item');
+                animatedItems.forEach(item => {
+                    const itemDelay = parseFloat(item.style.animationDelay || item.dataset.delay || 0) * 1000;
+                    item.style.animation = 'none';
+                    item.style.opacity = '0'; 
+                    setTimeout(() => {
+                        item.offsetHeight; 
+                        item.style.animation = null;
+                        const itemAnimationClass = Array.from(item.classList).find(cls => cls.startsWith('animate-') && cls !== 'animated-item') || 'animate-fade-in-up';
+                        item.classList.remove(itemAnimationClass); 
+                        void item.offsetWidth; 
+                        item.classList.add(itemAnimationClass);
+                        item.style.opacity = '1'; 
+                    }, itemDelay);
+                });
+            } else {
+                element.classList.add(animationClassOut);
+                element.addEventListener('animationend', function handler() {
+                    element.classList.add('hidden', 'opacity-0');
+                    element.classList.remove('active', animationClassOut);
+                    element.removeEventListener('animationend', handler);
+                }, { once: true });
+            }
+        }
+        
+        function displayMessage(message, type = 'error') {
+            messageBoxContainer.innerHTML = ''; 
+            const messageDiv = document.createElement('div');
+            const icon = document.createElement('i');
+            icon.className = `fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'} mr-2`;
+            messageDiv.appendChild(icon);
+            messageDiv.appendChild(document.createTextNode(message));
+            messageDiv.className = `message-box ${type === 'success' ? 'message-box-success' : 'message-box-error'}`;
+            
+            messageBoxContainer.appendChild(messageDiv);
+            messageBoxContainer.classList.remove('hidden');
+            
+            messageDiv.style.animation = 'none';
+            requestAnimationFrame(() => {
+              messageDiv.style.animation = '';
+              messageDiv.classList.add('animate-pop-in');
+            });
+        }
+
+        function clearMessages() {
+            messageBoxContainer.classList.add('hidden');
+            messageBoxContainer.innerHTML = '';
+            const errorFields = ['nameError', 'emailError', 'passwordError', 'confirmPasswordError', 'adminKeyError'];
+            errorFields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = '';
+            });
+        }
+
+        function showError(message, elementId) {
+            const errorElement = document.getElementById(elementId);
+            if (errorElement) {
+                errorElement.textContent = message;
+            } else {
+                displayMessage(message, 'error');
+            }
+        }
+
+        // --- Event Listeners ---
+        nextStepBtn.addEventListener("click", () => {
+            let step1IsValid = true;
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            
+            clearMessages(); 
+            document.getElementById("nameError").textContent = ""; 
+            document.getElementById("emailError").textContent = "";
+
+            if (!name) {
+                step1IsValid = false;
+                showError("Nama Lengkap diperlukan.", "nameError");
+            }
+            
+            if (!email) {
+                step1IsValid = false;
+                showError("Alamat Email diperlukan.", "emailError");
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                step1IsValid = false;
+                showError("Format email tidak valid.", "emailError");
+            }
+
+            if (step1IsValid) {
+                animateStep(step1Element, 'animate-slide-out-left', 'animate-slide-in-right', false);
+                animateStep(step2Element, 'animate-slide-out-left', 'animate-slide-in-right', true);
+                currentStep = 2;
+                updateInfoPaneContent(2);
+            } else {
+                displayMessage('Mohon perbaiki kesalahan pada Langkah 1.', 'error');
+            }
+        });
+
+        prevStepBtn.addEventListener("click", () => {
+            animateStep(step2Element, 'animate-slide-out-right', 'animate-slide-in-left', false);
+            animateStep(step1Element, 'animate-slide-out-right', 'animate-slide-in-left', true);
+            currentStep = 1;
+            updateInfoPaneContent(1);
+            clearMessages(); 
+        });
+
+        adminCheckbox.addEventListener("change", function () {
+            if (this.checked) {
+                adminKeyGroup.classList.remove("hidden", "opacity-0", "max-h-0");
+                adminKeyGroup.classList.add("opacity-100", "animate-fade-in-up"); 
+                adminKeyGroup.style.maxHeight = adminKeyGroup.scrollHeight + "px";
+                adminKeyInput.required = true;
+                infoPane.classList.add('admin-mode');
+                adminInfoPanel.classList.remove('hidden');
+                adminInfoPanel.classList.add('animate-fade-in');
+            } else {
+                adminKeyGroup.classList.remove("opacity-100", "animate-fade-in-up");
+                adminKeyGroup.classList.add("opacity-0");
+                adminKeyGroup.style.maxHeight = "0px";
+                setTimeout(() => {
+                     if (!adminCheckbox.checked) adminKeyGroup.classList.add("hidden");
+                }, 300); 
+                adminKeyInput.required = false;
+                adminKeyInput.value = "";
+                document.getElementById("adminKeyError").textContent = "";
+                infoPane.classList.remove('admin-mode');
+                adminInfoPanel.classList.add('hidden');
+                adminInfoPanel.classList.remove('animate-fade-in');
+            }
+        });
+
+        function handleInputFocus(inputElement, iconElement) {
+            if (inputElement && iconElement) { 
+                inputElement.addEventListener('focus', () => {
+                    iconElement.classList.add('active');
+                });
+                inputElement.addEventListener('blur', () => {
+                    iconElement.classList.remove('active');
+                });
+            }
+        }
+
+        handleInputFocus(nameInput, nameIcon);
+        handleInputFocus(emailInput, emailIcon);
+        handleInputFocus(passwordInput, passwordLeftIcon);
+        handleInputFocus(confirmPasswordInput, confirmPasswordLeftIcon);
+        handleInputFocus(adminKeyInput, adminKeyLeftIcon); 
+
+        function togglePasswordVisibility(inputField, iconElement) {
+             if (inputField && iconElement) { 
+                if (inputField.type === "password") {
+                    inputField.type = "text";
+                    iconElement.classList.remove("fa-eye");
+                    iconElement.classList.add("fa-eye-slash", "active"); 
+                } else {
+                    inputField.type = "password";
+                    iconElement.classList.remove("fa-eye-slash", "active");
+                    iconElement.classList.add("fa-eye");
+                }
+            }
+        }
+
+        if (passwordToggleIcon) {
+            passwordToggleIcon.addEventListener('click', () => {
+                togglePasswordVisibility(passwordInput, passwordToggleIcon);
+            });
+        }
+        if (confirmPasswordToggleIcon) {
+            confirmPasswordToggleIcon.addEventListener('click', () => {
+                togglePasswordVisibility(confirmPasswordInput, confirmPasswordToggleIcon);
+            });
+        }
+
+        // --- Fungsi Backend Interaction ---
+        async function saveUserToBackend(userData) {
+            const API_BASE_URL = 'http://localhost:3000';
+            const API_URL = `${API_BASE_URL}/api/auth/register`;
+
+            console.log("Mengirim data ke backend:", userData);
+            console.log("URL API:", API_URL);
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData),
+                });
+
+                console.log("Respons status dari backend:", response.status); 
+
+                let result;
+                const responseText = await response.text();
+                try {
+                    result = JSON.parse(responseText);
+                    console.log("Respons JSON dari backend:", result);
+                } catch (e) {
+                    console.error("Gagal parse JSON dari backend. Respons mentah:", responseText);
+                    throw new Error(`Server mengirim respons yang tidak valid (bukan format JSON). Status: ${response.status}. Isi Respons: "${responseText.substring(0,200)}${responseText.length > 200 ? '...' : ''}"`);
+                }
+
+                if (!response.ok) {
+                    throw new Error(result.message || `Registrasi gagal: Status ${response.status}`);
+                }
+                return result; 
+            } catch (error) {
+                console.error('Error saat registrasi (fetch atau proses):', error);
+                if (error.message.includes('Failed to fetch')) {
+                     throw new Error('Tidak dapat terhubung ke server. Pastikan backend Anda berjalan, URL API benar, dan tidak ada masalah CORS.');
+                }
+                throw error; 
+            }
+        }
+
+        // --- Form Submission Handler ---
+        registerForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            clearMessages(); 
+
+            const originalBtnText = btnText.textContent;
+            submitBtn.classList.add('btn-loading');
+            btnText.textContent = 'Memproses...';
+            submitBtn.disabled = true;
+
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+            const confirmPassword = confirmPasswordInput.value.trim();
+            const isAdminChecked = adminCheckbox.checked;
+            const adminKeyValue = adminKeyInput.value.trim();
+            
+            let formIsValid = true;
+
+            if (!name) {
+                showError('Nama Lengkap diperlukan.', 'nameError');
+                formIsValid = false;
+            }
+            if (!email) {
+                showError('Alamat Email diperlukan.', 'emailError');
+                formIsValid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showError('Format email tidak valid.', 'emailError');
+                formIsValid = false;
+            }
+
+            if (!password) {
+                showError('Mohon buat kata sandi.', 'passwordError');
+                formIsValid = false;
+            } else if (password.length < 6) { 
+                showError('Kata sandi minimal harus 6 karakter.', 'passwordError');
+                formIsValid = false;
+            }
+            if (password !== confirmPassword) {
+                showError('Konfirmasi kata sandi tidak cocok.', 'confirmPasswordError'); 
+                formIsValid = false;
+            }
+            
+            let payloadIsAdmin = false;
+            let payloadAdminKey = undefined;
+
+            if (isAdminChecked) {
+                payloadIsAdmin = true; 
+                if (!adminKeyValue) {
+                    showError("Kunci Rahasia Admin diperlukan.", "adminKeyError");
+                    formIsValid = false;
+                } else {
+                    payloadAdminKey = adminKeyValue;
+                }
+            }
+
+            if (!formIsValid) {
+                submitBtn.classList.remove('btn-loading');
+                btnText.textContent = originalBtnText;
+                submitBtn.disabled = false;
+                
+                if (document.getElementById("nameError").textContent || document.getElementById("emailError").textContent) {
+                    if (currentStep === 2) {
+                        animateStep(step2Element, 'animate-slide-out-right', 'animate-slide-in-left', false);
+                        animateStep(step1Element, 'animate-slide-out-right', 'animate-slide-in-left', true);
+                        currentStep = 1;
+                        updateInfoPaneContent(1);
+                    }
+                     displayMessage('Mohon perbaiki kesalahan pada Langkah 1.', 'error');
+                } else {
+                     displayMessage('Mohon perbaiki kesalahan pada formulir.', 'error');
+                }
+                return;
+            }
+
+            const userData = {
+                name: name,
+                email: email,
+                password: password,
+                isAdmin: payloadIsAdmin,
+            };
+             if (payloadIsAdmin && payloadAdminKey) {
+                userData.adminKey = payloadAdminKey;
+            }
+
+            try {
+                const backendResponse = await saveUserToBackend(userData);
+                
+                displayMessage(backendResponse.message || "Registrasi berhasil! Mengarahkan Anda...", 'success');
+                
+                setTimeout(() => {
+                    window.location.href = "index.html"; 
+                }, 2000); 
+
+                registerForm.reset();
+                adminCheckbox.checked = false;
+                adminCheckbox.dispatchEvent(new Event('change')); 
+
+                if (currentStep === 2) {
+                    animateStep(step2Element, 'animate-slide-out-right', 'animate-slide-in-left', false);
+                    animateStep(step1Element, 'animate-slide-out-right', 'animate-slide-in-left', true);
+                    currentStep = 1;
+                    updateInfoPaneContent(1);
+                }
+
+            } catch (error) {
+                console.error('Error submit registrasi (ditangkap di handler):', error);
+                displayMessage(error.message || "Terjadi kesalahan saat registrasi.", 'error');
+            } finally {
+                submitBtn.classList.remove('btn-loading');
+                btnText.textContent = originalBtnText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // --- Inisialisasi ---
+        updateInfoPaneContent(1); 
+        
+        document.querySelectorAll('.animated-item').forEach((el) => {
+            const delay = parseFloat(el.style.animationDelay || el.dataset.delay || 0) * 1000;
+            const isInitiallyVisible = el.closest('#step1.active') || el.closest('#infoPane');
+
+            if (isInitiallyVisible) {
+                el.style.opacity = '0'; 
+                setTimeout(() => {
+                    el.style.animation = 'none'; 
+                    el.offsetHeight; 
+                    el.style.animation = null; 
+                    const itemAnimationClass = Array.from(el.classList).find(cls => cls.startsWith('animate-') && cls !== 'animated-item') || 'animate-fade-in-up'; 
+                    el.classList.remove(itemAnimationClass); 
+                    void el.offsetWidth; 
+                    el.classList.add(itemAnimationClass); 
+                    el.style.opacity = '1'; 
+                }, delay);
+            } else {
+                el.style.opacity = '0'; 
+            }
+        });
+    </script>
+</body>
+</html>
