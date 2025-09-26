@@ -1,0 +1,42 @@
+[
+  {
+    "id": "8715b386-6c2d-4dc7-a727-40bb10c2357e",
+    "name": "ellyas",
+    "email": "budi@gmail.com",
+    "password": "$2b$12$cpHqPZWvdAxVsRTamLKy0.B/QJdX1V6c8fiUuWIJUJ.MK7tiMrXO6",
+    "role": "user",
+    "createdAt": "2025-06-01T15:55:03.271Z",
+    "updatedAt": "2025-06-01T15:55:03.272Z",
+    "verified": true
+  },
+  {
+    "id": "2d37cb65-500e-483d-8e9b-a7c1765f30f0",
+    "name": "budi1",
+    "email": "budi1@gmail.com",
+    "password": "$2b$12$sm5JdohbTH.zEGs0GN.d3uPBAUT8u9u63nu43MNIb9re2Dvx/kG9S",
+    "role": "user",
+    "createdAt": "2025-06-01T15:57:00.780Z",
+    "updatedAt": "2025-06-01T15:57:00.780Z",
+    "verified": true
+  },
+  {
+    "id": "a01c6937-a9ea-4976-bfee-cccd95b7936a",
+    "name": "budi12",
+    "email": "budi2@gmail.com",
+    "password": "$2b$12$qhp5baR0q6eisibMnwVCEO0skVKhWOzmddrUVEJf.vLGhmo4gCKpG",
+    "role": "admin",
+    "createdAt": "2025-06-01T15:57:51.342Z",
+    "updatedAt": "2025-06-01T15:57:51.342Z",
+    "verified": true
+  },
+  {
+    "id": "0af0998f-f7f3-4ee8-ba22-c7d0c214d593",
+    "name": "ellyas",
+    "email": "ellyaspram03@gmail.com",
+    "password": "$2b$12$nmIp5G48sQl7f/GBk9igEuSo9Fc3Hkamfbq6m8ev3UYpIQ2LkfPhS",
+    "role": "user",
+    "createdAt": "2025-06-01T17:39:01.776Z",
+    "updatedAt": "2025-06-01T17:39:01.776Z",
+    "verified": true
+  }
+]
